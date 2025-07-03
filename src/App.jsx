@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function App() {
   const [day, setDay] = useState(1);
@@ -16,12 +16,24 @@ export default function App() {
       mission:
         "List 3 versions of yourself: the one people see, the one you show to friends, and the real one you hide.",
     },
+    // Add more challenges as needed
   ];
 
   const currentChallenge = dailyChallenges[day - 1] || {
     title: "Coming Soon",
     mission: "More days will be added soon!",
   };
+
+  // Load saved reflection
+  useEffect(() => {
+    const saved = localStorage.getItem(`rwax-reflection-day-${day}`);
+    setReflection(saved || "");
+  }, [day]);
+
+  // Save reflection on change
+  useEffect(() => {
+    localStorage.setItem(`rwax-reflection-day-${day}`, reflection);
+  }, [reflection, day]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800 text-white p-6">
